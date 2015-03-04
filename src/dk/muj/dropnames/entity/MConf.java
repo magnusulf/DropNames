@@ -40,15 +40,19 @@ public class MConf extends Entity<MConf>
 	
 	public boolean isEnabled = true;
 	public boolean displayAmount = false;
+	public boolean allowCustomNames = true;
 	
 	public WorldExceptionSet worldEnabled = new WorldExceptionSet();
 	
-	private Map<Material, String> defaultCustomNames = MUtil.map(
+	private Map<Material, String> defaultCustomNames = MUtil.map
+			(
 			Material.DIAMOND_SWORD, "Sword of diamond",
-			Material.BOOK, "Book of wisdom");
+			Material.BOOK, "Book of wisdom"
+			);
 	
 	public String getDefaultName(Material type)
 	{
+		if (type == null) throw new IllegalArgumentException("tpye mustn't be null");
 		String ret = this.defaultCustomNames.get(type);
 		if (ret == null) ret = Txt.getMaterialName(type);
 		return ret;

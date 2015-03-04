@@ -13,8 +13,7 @@ import dk.muj.dropnames.entity.MConf;
 import dk.muj.dropnames.entity.MConfColl;
 
 public class DropNames extends MassivePlugin
-{
-	
+{	
 	// -------------------------------------------- //
 	// INSTANCE & CONSTRUCT
 	// -------------------------------------------- //
@@ -23,9 +22,8 @@ public class DropNames extends MassivePlugin
 	public static DropNames get() { return i; }
 	public DropNames() { i = this; }
 	
-	
 	// -------------------------------------------- //
-	// OVERRIDE
+	// OVERRIDE: PLUGIN
 	// -------------------------------------------- //
 	
 	@Override
@@ -50,20 +48,28 @@ public class DropNames extends MassivePlugin
 		
 		Item item = event.getEntity();
 		ItemStack stack = item.getItemStack();
-		ItemMeta meta = stack.getItemMeta();
-		
-		String name;
-		if (meta.hasDisplayName()) name = meta.getDisplayName();
-		else name = MConf.get().getDefaultName(stack.getType());
-		
-		if (stack.getAmount() > 1 && MConf.get().displayAmount)
-		{
-			name += " x" + String.valueOf(stack.getAmount());
-		}
+
+		String name = getCustomName(stack);
 		
 		item.setCustomName(name);
 		item.setCustomNameVisible(true);
 	}
 	
+	public static String getCustomName(ItemStack stack)
+	{
+		String ret;
+		
+		ItemMeta meta = stack.getItemMeta();
+		
+		if (meta.hasDisplayName() && MConf.get().allowCustomNames) ret = meta.getDisplayName();
+		else ret = MConf.get().getDefaultName(stack.getType());
+		
+		if (stack.getAmount() > 1 && MConf.get().displayAmount)
+		{
+			ret += " x" + String.valueOf(stack.getAmount());
+		}
+		
+		return ret;
+	}
 	
 }

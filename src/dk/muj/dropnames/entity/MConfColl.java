@@ -1,10 +1,7 @@
 package dk.muj.dropnames.entity;
 
+import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.store.Coll;
-import com.massivecraft.massivecore.store.MStore;
-
-import dk.muj.dropnames.Const;
-import dk.muj.dropnames.DropNames;
 
 public class MConfColl extends Coll<MConf>
 {
@@ -14,10 +11,6 @@ public class MConfColl extends Coll<MConf>
 	
 	private static MConfColl i = new MConfColl();
 	public static MConfColl get() { return i; }
-	private MConfColl()
-	{
-		super(Const.COLLECTION_MCONF, MConf.class, MStore.getDb(), DropNames.get());
-	}
 
 	// -------------------------------------------- //
 	// STACK TRACEABILITY
@@ -32,12 +25,13 @@ public class MConfColl extends Coll<MConf>
 	// -------------------------------------------- //
 	// OVERRIDE
 	// -------------------------------------------- //
-	
+
 	@Override
-	public void init()
+	public void setActive(boolean active)
 	{
-		super.init();
-		MConf.i = this.get("Config", true);
+		super.setActive(active);
+		if (!active) return;
+		MConf.i = this.get(MassiveCore.INSTANCE, true);
 	}
-	
+
 }

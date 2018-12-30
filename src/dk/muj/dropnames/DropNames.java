@@ -1,5 +1,6 @@
 package dk.muj.dropnames;
 
+import com.massivecraft.massivecore.util.Txt;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,13 +28,11 @@ public class DropNames extends MassivePlugin
 	// -------------------------------------------- //
 	
 	@Override
-	public void onEnable()
+	public void onEnableInner()
 	{
-		if ( ! preEnable()) return;
-		
-		MConfColl.get().init();
-		
-		this.postEnable();
+		activate(
+			MConfColl.class
+		);
 	}
 	
 	// -------------------------------------------- //
@@ -44,12 +43,13 @@ public class DropNames extends MassivePlugin
 	public void setItemName(ItemSpawnEvent event)
 	{
 		if ( ! MConf.get().isEnabled) return;
-		if ( ! MConf.get().worldEnabled.contains(event.getEntity().getLocation().getWorld())) return;
+		if ( ! MConf.get().worldsEnabled.contains(event.getEntity().getLocation().getWorld())) return;
 		
 		Item item = event.getEntity();
 		ItemStack stack = item.getItemStack();
 
 		String name = getCustomName(stack);
+		if (name == null) return;
 		
 		item.setCustomName(name);
 		item.setCustomNameVisible(true);
@@ -58,11 +58,29 @@ public class DropNames extends MassivePlugin
 	public static String getCustomName(ItemStack stack)
 	{
 		String ret;
-		
+
 		ItemMeta meta = stack.getItemMeta();
-		
-		if (meta.hasDisplayName() && MConf.get().allowCustomNames) ret = meta.getDisplayName();
-		else ret = MConf.get().getDefaultName(stack.getType());
+
+		if (meta.hasDisplayName() && MConf.get().displayRenamed)
+		{
+			ret = meta.getDisplayName();
+		}
+		else if (MConf.get().displayNotRenamed)
+		{
+			String rename = MConf.get().customNames.get(stack.getType());
+			if (rename != null)
+			{
+				ret = rename;
+			}
+			else
+			{
+				ret = Txt.getMaterialName(stack.getType());
+			}
+		}
+		else
+		{
+			return null;
+		}
 		
 		if (stack.getAmount() > 1 && MConf.get().displayAmount)
 		{

@@ -1,6 +1,0 @@
-main: dk.muj.dropnames.DropNames
-name: DropNames
-version: 0.1
-authors: [Madus]
-description: §eDropNames is a plugin which gives dropped items a fancy name.
-depend: [MassiveCore]

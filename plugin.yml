@@ -1,0 +1,8 @@
+main: ${project.groupId}.${project.name}
+name: ${project.name}
+version: ${project.version}
+website: ${project.url}
+description: ${project.description}
+authors: [Madus]
+depend: [MassiveCore]
+api-version: 1.13

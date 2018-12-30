@@ -1,9 +1,11 @@
 package dk.muj.dropnames;
 
 import com.massivecraft.massivecore.util.Txt;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,23 +16,25 @@ import dk.muj.dropnames.entity.MConf;
 import dk.muj.dropnames.entity.MConfColl;
 
 public class DropNames extends MassivePlugin
-{	
+	{
 	// -------------------------------------------- //
 	// INSTANCE & CONSTRUCT
 	// -------------------------------------------- //
-	
+
 	private static DropNames i;
+
 	public static DropNames get() { return i; }
+
 	public DropNames()
 	{
 		i = this;
 		this.setVersionSynchronized(false);
 	}
-	
+
 	// -------------------------------------------- //
 	// OVERRIDE: PLUGIN
 	// -------------------------------------------- //
-	
+
 	@Override
 	public void onEnableInner()
 	{
@@ -38,23 +42,34 @@ public class DropNames extends MassivePlugin
 			MConfColl.class
 		);
 	}
-	
+
 	// -------------------------------------------- //
 	// LISTENER
 	// -------------------------------s------------- //
-	
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void setItemName(ItemSpawnEvent event)
-	{
-		if ( ! MConf.get().isEnabled) return;
-		if ( ! MConf.get().worldsEnabled.contains(event.getEntity().getLocation().getWorld())) return;
 
-		Item item = event.getEntity();
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void itemSpawn(ItemSpawnEvent event)
+	{
+		setName(event.getEntity());
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void itemMerge(ItemMergeEvent event)
+	{
+		Item item = event.getTarget();
+		Bukkit.getScheduler().runTaskLater(this, () -> setName(item), 1L);
+	}
+
+	public void setName(Item item)
+	{
+		if (!MConf.get().isEnabled) return;
+		if (!MConf.get().worldsEnabled.contains(item.getLocation().getWorld())) return;
+
 		ItemStack stack = item.getItemStack();
 
 		String name = getCustomName(stack);
 		if (name == null) return;
-		
+
 		item.setCustomName(name);
 		item.setCustomNameVisible(true);
 	}

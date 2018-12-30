@@ -21,7 +21,11 @@ public class DropNames extends MassivePlugin
 	
 	private static DropNames i;
 	public static DropNames get() { return i; }
-	public DropNames() { i = this; }
+	public DropNames()
+	{
+		i = this;
+		this.setVersionSynchronized(false);
+	}
 	
 	// -------------------------------------------- //
 	// OVERRIDE: PLUGIN
@@ -37,14 +41,14 @@ public class DropNames extends MassivePlugin
 	
 	// -------------------------------------------- //
 	// LISTENER
-	// -------------------------------------------- //
+	// -------------------------------s------------- //
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void setItemName(ItemSpawnEvent event)
 	{
 		if ( ! MConf.get().isEnabled) return;
 		if ( ! MConf.get().worldsEnabled.contains(event.getEntity().getLocation().getWorld())) return;
-		
+
 		Item item = event.getEntity();
 		ItemStack stack = item.getItemStack();
 

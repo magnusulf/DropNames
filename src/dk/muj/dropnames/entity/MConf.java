@@ -21,10 +21,16 @@ public class MConf extends Entity<MConf>
 	// -------------------------------------------- //
 	
 	public boolean isEnabled = true;
-	public boolean displayAmount = false;
-	public boolean displayRenamed = true;
-	public boolean displayNotRenamed = true;
-	
+
+	public boolean isEnabledItem = true;
+	public boolean isEnabledExperienceOrb = true;
+
+	public boolean displayItemAmount = false;
+	public boolean displayItemRenamed = true;
+	public boolean displayItemNotRenamed = true;
+
+	public boolean displayExperienceOrbAmount = true;
+
 	public WorldExceptionSet worldsEnabled = new WorldExceptionSet();
 	
 	public Map<Material, String> customNames = MUtil.map
@@ -32,6 +38,8 @@ public class MConf extends Entity<MConf>
 			Material.DIAMOND_SWORD, "Sword of diamond",
 			Material.BOOK, "Book of wisdom"
 			);
+
+	public String experienceOrbName = "Exp";
 	
 }
 

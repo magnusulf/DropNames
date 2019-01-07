@@ -90,6 +90,7 @@ public class DropNames extends MassivePlugin
 			{
 				ret = Txt.getMaterialName(stack.getType());
 			}
+			ret = Txt.parse(ret);
 		}
 		else
 		{
@@ -100,7 +101,7 @@ public class DropNames extends MassivePlugin
 		{
 			ret += " x" + String.valueOf(stack.getAmount());
 		}
-		
+
 		return ret;
 	}
 
@@ -138,7 +139,7 @@ public class DropNames extends MassivePlugin
 		int amount = orb.getExperience();
 		String ret = MConf.get().experienceOrbName;
 		if (MConf.get().displayExperienceOrbAmount) ret += " x" + String.valueOf(amount);
-
+		ret = Txt.parse(ret);
 		return ret;
 	}
 
